@@ -1,0 +1,357 @@
+openapi: 3.0.0
+info:
+  title: Simple Inventory API
+  description: This is a simple API
+  contact:
+    email: carlos@um.es
+  license:
+    name: Apache 2.0
+    url: https://github.com/cboot/RPIdirector/
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/carlos.albaladejo/RPIDirector/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://rpidirector.site/api/
+  description: Site
+paths:
+  /login:
+    post:
+      summary: Logs an user into the application
+      description: |
+        Logs an user in and provides the token for the session
+      operationId: authenticate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login_body'
+      responses:
+        "200":
+          description: Authorization token to be carried in the bearer requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BadRequest'
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/InternalError'
+  /users:
+    get:
+      tags:
+      - users
+      summary: Gets the user list
+      description: "Gets the list of players that match the criteria selected. If\
+        \ no page is provided first page will be assumed. If the results limit paramet\
+        \ is not provided a limit of 10 will be assumed.  \n"
+      operationId: filterUsers
+      parameters:
+      - name: username
+        in: query
+        description: Case insensitive substring to look for in the players list username
+        required: false
+        allowEmptyValue: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: ron
+      - name: page
+        in: query
+        description: Page for starting results
+        required: false
+        allowEmptyValue: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+        example: 1
+      - name: results
+        in: query
+        description: Reults per page
+        required: false
+        allowEmptyValue: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+        example: 10
+      responses:
+        "200":
+          description: The list of players matching the criteria.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - users
+      summary: Creates a new user
+      description: Creates a new user given that the data is correct and the email
+        is not registered yet.
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users_body'
+      responses:
+        "200":
+          description: "User was created, resource url returned"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BadRequest'
+        "500":
+          description: Internal error server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/InternalError'
+      security:
+      - bearerAuth: []
+  /users/{userId}:
+    get:
+      tags:
+      - users
+      summary: Retrieves the specified user
+      description: Retrieves the specified user if exists.
+      operationId: getPlayer
+      parameters:
+      - name: userId
+        in: path
+        description: User ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User found and retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BadRequest'
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/NotFound'
+        "500":
+          description: Internal error server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/InternalError'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - users
+      summary: Deletes the specified user
+      description: Deletes the specified user if exists
+      operationId: deletePlayer
+      parameters:
+      - name: userId
+        in: path
+        description: User ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: User found and deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BadRequest'
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/NotFound'
+        "500":
+          description: Internal error server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/InternalError'
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - users
+      summary: Updates given properties
+      description: Updates given properties for the given user. If a property is not
+        set it won't be updated
+      operationId: modifyPlayer
+      parameters:
+      - name: userId
+        in: path
+        description: User ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: "Possible values to be updated, at least one must be set."
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/users_userId_body'
+      responses:
+        "200":
+          description: User modified
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/BadRequest'
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/NotFound'
+        "500":
+          description: Internal error server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/InternalError'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    User:
+      required:
+      - email
+      - id
+      - name
+      - registerDate
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        name:
+          type: string
+          example: CbooT
+        email:
+          type: string
+          example: carlos@um.es
+        registerDate:
+          type: string
+          format: date-time
+          example: 2016-08-29T09:12:33.001Z
+    login_body:
+      type: object
+      properties:
+        username:
+          type: string
+          example: foo
+        password:
+          type: string
+          example: bar
+    inline_response_200:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    users_body:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          example: CbooT
+        password:
+          type: string
+          example: aPassword
+        email:
+          type: string
+          example: carlos@um.es
+    inline_response_200_1:
+      type: object
+      properties:
+        playerId:
+          type: string
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        url:
+          type: string
+          format: url
+          example: http://localhost:8080/players/d290f1ee-6c54-4b01-90e6-d701748f0851
+    users_userId_body:
+      required:
+      - email
+      - name
+      - password
+      properties:
+        username:
+          type: string
+          example: CbooT
+        password:
+          type: string
+          example: aPassword
+        email:
+          type: string
+          example: carlos@um.es
+  responses:
+    BadRequest:
+      description: The operation could not be completed because of input error. Do
+        not retry
+    NotFound:
+      description: The requested resource was not found. Do not retry
+    InternalError:
+      description: The operation could not be completed due to an internal error.
+        Retry after a while
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
