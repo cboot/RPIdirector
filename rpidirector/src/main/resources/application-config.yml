@@ -1,0 +1,9 @@
+config:
+  authorization:
+    request.filter.enabled: false
+
+app:
+  token:
+    expirity.extension.minutes: 30
+
+app.request.forgotten..expirity.extension.seconds: 120

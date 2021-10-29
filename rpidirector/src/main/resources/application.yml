@@ -6,10 +6,13 @@ spring:
     username: rpidirector
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true 
   main:
     show-banner: false
   thymeleaf:
     cache: false
+  config:
+    import: application-config.yml
 
 logging:
   level:
@@ -23,10 +26,8 @@ logging:
           descriptor:
             sql:
               BasicBinder: TRACE
+    com.cboot: DEBUG
 
-management:
-  security:
-    enabled: false
-security:
-  basic:
-    enabled: false
+server:
+  servlet:
+    context-path: /api
