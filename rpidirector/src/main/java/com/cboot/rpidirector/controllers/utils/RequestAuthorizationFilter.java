@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.cboot.rpidirector.services.exceptions.TokenException;
-import com.cboot.rpidirector.services.user.ValidateTokenUseCase;
+import com.cboot.rpidirector.services.users.ValidateTokenUseCase;
 import com.cboot.rpidirector.utils.Messages;
 
 import lombok.extern.slf4j.Slf4j;

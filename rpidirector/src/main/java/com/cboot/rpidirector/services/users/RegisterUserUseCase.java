@@ -1,4 +1,4 @@
-package com.cboot.rpidirector.services.user;
+package com.cboot.rpidirector.services.users;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -33,7 +33,7 @@ public class RegisterUserUseCase {
 	private PasswordEncoder passwordEncoder;
 	
 	public User register(String email, String password, String name) {
-		log.debug("Register {} ", LogUtils.toJsonString("email", email, "name", name));
+		log.info("Register {} ", LogUtils.toJsonString("email", email, "name", name));
 		Optional<User> fetched = userRepository.findByEmail(email);
 		
 		if ( fetched.isPresent() ) {

@@ -24,10 +24,10 @@ import com.cboot.rpidirector.dto.responses.LoginResponseDTO;
 import com.cboot.rpidirector.dto.responses.SendRequestCodeResponseDTO;
 import com.cboot.rpidirector.entities.User;
 import com.cboot.rpidirector.services.exceptions.LoginException;
-import com.cboot.rpidirector.services.user.LoginUseCase;
-import com.cboot.rpidirector.services.user.PostPasswordResetCodeUseCase;
-import com.cboot.rpidirector.services.user.RegisterUserUseCase;
-import com.cboot.rpidirector.services.user.RequestPasswordResetCodeUseCase;
+import com.cboot.rpidirector.services.users.LoginUseCase;
+import com.cboot.rpidirector.services.users.PostPasswordResetCodeUseCase;
+import com.cboot.rpidirector.services.users.RegisterUserUseCase;
+import com.cboot.rpidirector.services.users.RequestPasswordResetCodeUseCase;
 import com.cboot.rpidirector.utils.MapperUtils;
 import com.cboot.rpidirector.utils.Messages;
 

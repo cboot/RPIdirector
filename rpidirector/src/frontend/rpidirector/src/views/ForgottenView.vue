@@ -37,9 +37,12 @@
             </b-form-group>
           </b-col>
           <b-col cols="12" class="d-flex justify-content-between">
-            
-            <b-button variant="primary" v-if="codeSent" v-on:click="postCode"> Confirm code </b-button>
-            <b-button variant="primary" v-else v-on:click="requestCode"> Reset password</b-button>
+            <b-button variant="primary" v-if="codeSent" v-on:click="postCode">
+              Confirm code
+            </b-button>
+            <b-button variant="primary" v-else v-on:click="requestCode">
+              Reset password</b-button
+            >
             <b-button to="/"> Cancel </b-button>
           </b-col>
         </b-row>
@@ -50,6 +53,8 @@
 
 <script>
 import TheWelcomeMessage from "../components/TheWelcomeMessage.vue";
+import UserService from "../services/users";
+
 export default {
   components: { TheWelcomeMessage },
   data: function () {
@@ -57,54 +62,25 @@ export default {
       email: "",
       codeSent: false,
       code: "",
-      timeout:""
+      timeout: "",
     };
   },
   methods: {
-    requestCode: function() {
-
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      fetch("http://localhost:8080/api/public/users/requestRecoverPasswordCode/"+this.email, requestOptions)
-      .then((response) => {
-        if (response.ok) {
-          this.codeSent = true;
-          this.timeout = setTimeout(function() {
+    requestCode: function () {
+      UserService.requestCode(this.email)
+      .then( () => {
+        this.codeSent = true;
+        this.timeout = setTimeout(
+          function () {
             this.codeSent = false;
-          }.bind(this), 120000);
-        } else {
-          throw new Error("Failed to request code");
-        }
+          }.bind(this),
+          120000
+        );
       })
-      .catch((error) => alert("Error: " + error));
     },
-    postCode: function() {
-
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      fetch("http://localhost:8080/api/public/users/postRecoverPasswordCode/"+this.email+"/"+this.code, requestOptions)
-      .then((response) => {
-        if (response.ok) {
-          return response.json()
-        } else {
-          throw new Error("Failed to post code");
-        }
-      })
-      .then((data) => {
-          this.$root.setLoggedIn(data.user);
-      })
-      .catch((error) => alert("Error: " + error));
-    }
+    postCode: function () {
+      UserService.postCode(this.email, this.code);
+    },
   },
 };
 </script>

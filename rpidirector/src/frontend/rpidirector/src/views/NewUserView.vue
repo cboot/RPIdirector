@@ -45,6 +45,7 @@
 
 <script>
 import TheWelcomeMessage from "../components/TheWelcomeMessage.vue";
+import UserService from '../services/users';
 
 export default {
   components: { TheWelcomeMessage },
@@ -55,33 +56,9 @@ export default {
       name: "",
     };
   },
-  methods: {
+  methods:{
     register: function() {
-      const payload = {
-        email: this.email,
-        password: this.password,
-        name: this.name,
-      };
-
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload)
-      };
-
-      fetch("http://localhost:8080/api/public/users/register", requestOptions)
-      .then((response) => {
-        if (response.status != 200) {
-          alert("Error!");
-        } else {
-          return response.json();
-        }
-      })
-      .then((data) => {
-          this.$root.setLoggedIn(data.user);
-      }).catch((error) => alert("Error: " + error));
+      UserService.register(this.email, this.password, this.name);
     },
   },
 };

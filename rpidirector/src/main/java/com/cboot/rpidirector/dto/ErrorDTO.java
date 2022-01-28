@@ -11,7 +11,6 @@ public class ErrorDTO {
 
 	@Getter
 	@Setter
-	
 	private int status;
 	
 	@Getter

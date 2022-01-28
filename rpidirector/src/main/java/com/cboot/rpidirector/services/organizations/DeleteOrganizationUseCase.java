@@ -1,4 +1,4 @@
-package com.cboot.rpidirector.services.organization;
+package com.cboot.rpidirector.services.organizations;
 
 import java.util.Optional;
 
@@ -13,7 +13,7 @@ import com.cboot.rpidirector.entities.OrganizationUser;
 import com.cboot.rpidirector.entities.User;
 import com.cboot.rpidirector.repositories.OrganizationRepository;
 import com.cboot.rpidirector.repositories.OrganizationUserRepository;
-import com.cboot.rpidirector.services.user.GetUserUseCase;
+import com.cboot.rpidirector.services.users.GetUserUseCase;
 import com.cboot.rpidirector.utils.LogUtils;
 import com.cboot.rpidirector.utils.Messages;
 

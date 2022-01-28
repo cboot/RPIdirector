@@ -1,4 +1,4 @@
-package com.cboot.rpidirector.services.organization;
+package com.cboot.rpidirector.services.organizations;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,7 +13,8 @@ import com.cboot.rpidirector.entities.OrganizationUser;
 import com.cboot.rpidirector.entities.User;
 import com.cboot.rpidirector.repositories.OrganizationRepository;
 import com.cboot.rpidirector.repositories.OrganizationUserRepository;
-import com.cboot.rpidirector.services.user.GetUserUseCase;
+import com.cboot.rpidirector.services.groups.CreateDefaultGroupForOrganizationUseCase;
+import com.cboot.rpidirector.services.users.GetUserUseCase;
 import com.cboot.rpidirector.utils.LogUtils;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,14 @@ public class CreateOrganizationUseCase {
 	@Autowired
 	private GetUserUseCase getUserService;
 	
+	@Autowired
+	private CreateDefaultGroupForOrganizationUseCase createDefaultGroupService;
+
 	public Organization create(String name, String owner) {
 		log.info("Create organization {}", LogUtils.toJsonString("name", name, "owner", owner));
+		
 		User user = getUserService.getById(owner);
+		
 		Organization organization = new Organization();
 		organization.setId(UUID.randomUUID().toString());
 		organization.setName(name);
@@ -45,7 +51,8 @@ public class CreateOrganizationUseCase {
 		organizationOwner.setSince(LocalDateTime.now());
 		organizationUserReposistory.save(organizationOwner);
 		organization.getUsers().add(organizationOwner);
-		organizationRepository.save(organization);
+		
+		organization.getGroups().add(createDefaultGroupService.createDefaultGroupForOrganization(owner, organization.getId()));
 		return organization;
 		
 	}

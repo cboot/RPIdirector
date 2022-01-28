@@ -1,4 +1,4 @@
-package com.cboot.rpidirector.services.user;
+package com.cboot.rpidirector.services.users;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -44,6 +44,10 @@ public class RequestPasswordResetCodeUseCase {
 		log.info("Retrieve password reset code from cache {}", LogUtils.toJsonString("email", email));
 		return Optional.ofNullable(codes.get(email));
 		
+	}
+	
+	public void clearCode(String email) {
+		codes.remove(email);
 	}
 	
 	private String randomString(int targetStringLength) {

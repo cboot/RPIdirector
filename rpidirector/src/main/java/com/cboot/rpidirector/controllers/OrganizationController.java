@@ -25,10 +25,10 @@ import com.cboot.rpidirector.dto.responses.GetOrganizationResponseDTO;
 import com.cboot.rpidirector.dto.responses.GetOrganizationsListResponseDTO;
 import com.cboot.rpidirector.entities.Organization;
 import com.cboot.rpidirector.entities.OrganizationUser;
-import com.cboot.rpidirector.services.organization.CreateOrganizationUseCase;
-import com.cboot.rpidirector.services.organization.DeleteOrganizationUseCase;
-import com.cboot.rpidirector.services.organization.GetOrganizationUseCase;
-import com.cboot.rpidirector.services.organization.GetOrganizationsListUseCase;
+import com.cboot.rpidirector.services.organizations.CreateOrganizationUseCase;
+import com.cboot.rpidirector.services.organizations.DeleteOrganizationUseCase;
+import com.cboot.rpidirector.services.organizations.GetOrganizationUseCase;
+import com.cboot.rpidirector.services.organizations.GetOrganizationsListUseCase;
 import com.cboot.rpidirector.utils.MapperUtils;
 
 @CrossOrigin

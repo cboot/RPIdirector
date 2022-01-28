@@ -2,12 +2,16 @@
   <div>
     You have access to {{ organizations.length }} organizations
     <li v-for="item in organizations" :key="item.id">
-      <organization-list-item :propOrganizationInfo="item" v-on:refreshFromChild="refresh" />
+      <organization-list-item
+        :propOrganizationInfo="item"
+        v-on:refreshFromChild="refresh"
+      />
     </li>
   </div>
 </template>
 
 <script>
+import OrganizationService from "../services/organizations";
 import OrganizationListItem from "./OrganizationListItem.vue";
 export default {
   components: { OrganizationListItem },
@@ -17,29 +21,13 @@ export default {
   },
   methods: {
     refresh: function () {
-      const requestOptions = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.$root.authString,
-        },
-      };
-
-      fetch("http://localhost:8080/api/private/organizations/", requestOptions)
+      OrganizationService.getAll()
         .then((response) => {
-          if (response.status != 200) {
-            alert("Error!");
-          } else {
-            return response.json();
-          }
+          this.organizations = response.data.organizationsList;
         })
-        .then((data) => {
-          this.organizations=[];
-          for (var myItem in data.organizationsList) {
-            this.organizations.push(data.organizationsList[myItem]);
-          }
-        })
-        .catch((error) => alert("Error: " + error));
+        .catch((error) => {
+          alert("theres an error:" + error);
+        });
     },
   },
   created: function () {

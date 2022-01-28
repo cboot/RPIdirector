@@ -27,6 +27,8 @@ public final class MapperUtils {
 		output.setName(organization.getOrganization().getName());
 		output.setRole(organization.getRole().toString());
 		output.setSince(organization.getSince());
+		output.setGroups(organization.getOrganization().getGroups().size());
+		output.setComputers(organization.getOrganization().getGroups().stream().filter( aGroup -> aGroup.isDefaultGroup()).findFirst().get().getComputers().size() );
 		return output;
 	}
 	

@@ -27,4 +27,5 @@ public class GroupComputer {
 	
 	@Getter @Setter @Column(columnDefinition = "DATETIME")
 	private LocalDateTime since;
+	
 }

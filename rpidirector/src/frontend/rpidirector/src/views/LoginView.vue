@@ -42,6 +42,7 @@
 
 <script>
 import TheWelcomeMessage from "../components/TheWelcomeMessage.vue"
+import UserService from "../services/users"
 
 export default {
   components: { TheWelcomeMessage },
@@ -53,25 +54,8 @@ export default {
   },
   methods: {
     login: function() {
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization" : "Basic " + btoa(this.email + ":" + this.password)
-        },
-      };
-
-      fetch("http://localhost:8080/api/public/users/login", requestOptions)
-      .then((response) => {
-        if (response.status != 200) {
-          alert("Error!");
-        } else {
-          return response.json();
-        }
-      })
-      .then((data) => {
-          this.$root.setLoggedIn(data.user);
-      }).catch((error) => alert("Error: " + error));
+      UserService.login(this.email, this.password);
+      
     }
   },
 }

@@ -1,11 +1,35 @@
 <template>
-    <div>
-        <h1> organization details for group {{ details.name }} </h1>
-    </div>
+  <div>
+    <h1>Details for organization {{ details.name }}</h1>
+    <b-row>
+      <b-col> Role: {{ details.role }} </b-col>
+      <b-col> Since: {{ details.since }} </b-col>
+    </b-row>
+    <b-row>
+      <b-col> Groups: {{ details.groups }} </b-col>
+      <b-col cols="1">
+        <my-add-button v-b-modal.modal-1 />
+        <b-modal id="modal-1" title="Add a new group">
+          <p class="my-4">Hello from modal!</p>
+        </b-modal>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col> Computers: {{ details.computers }} </b-col>
+      <b-col> </b-col>
+    </b-row>
+  </div>
 </template>
 
 <script>
+import OrganizationService from "../services/organizations";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import MyAddButton from '../components/MyAddButton.vue';
+library.add(faPlus);
+
 export default {
+  components: { MyAddButton },
   data: function () {
     return {
       organizationId: "",
@@ -13,35 +37,16 @@ export default {
     };
   },
   created() {
-      this.organizationId = this.$route.params.organizationId;
+    this.organizationId = this.$route.params.organizationId;
   },
   mounted() {
     this.refresh();
   },
   methods: {
     refresh: function () {
-      const requestOptions = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": this.$root.authString,
-        },
-      };
-
-      fetch(
-        "http://localhost:8080/api/private/organizations/" +
-          this.organizationId,
-        requestOptions
-      )
+      OrganizationService.get(this.organizationId)
         .then((response) => {
-          if (response.status != 200) {
-            alert("Error!");
-          } else {
-            return response.json();
-          }
-        })
-        .then((data) => {
-          this.details = data.organization;
+          this.details = response.data.organization;
         })
         .catch((error) => alert("Error: " + error));
     },

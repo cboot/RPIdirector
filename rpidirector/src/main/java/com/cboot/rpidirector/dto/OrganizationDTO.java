@@ -20,9 +20,9 @@ public class OrganizationDTO {
 	private LocalDateTime since;
 	
 	@Getter @Setter
-	private int groups = 0;
+	private int groups;
 	
 	@Getter @Setter
-	private int computers = 0;
+	private int computers;
 	
 }

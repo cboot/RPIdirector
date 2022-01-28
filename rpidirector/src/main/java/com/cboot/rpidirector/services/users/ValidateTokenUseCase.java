@@ -1,4 +1,4 @@
-package com.cboot.rpidirector.services.user;
+package com.cboot.rpidirector.services.users;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

@@ -21,6 +21,9 @@ public class Organization {
 	@Getter @Setter @Column(nullable = false)
 	private String name;
 		
-	@Getter @Setter @OneToMany (mappedBy = "organization", cascade = CascadeType.PERSIST)
+	@Getter @Setter @OneToMany (mappedBy = "organization")
 	private List<OrganizationUser> users = new ArrayList<>();
+	
+	@Getter @Setter @OneToMany (mappedBy = "organization", cascade = CascadeType.REMOVE)
+	private List<Group> groups = new ArrayList<>();
 }

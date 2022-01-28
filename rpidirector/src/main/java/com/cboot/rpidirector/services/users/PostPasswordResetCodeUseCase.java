@@ -1,4 +1,4 @@
-package com.cboot.rpidirector.services.user;
+package com.cboot.rpidirector.services.users;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -38,6 +38,7 @@ public class PostPasswordResetCodeUseCase {
 					&& requestCode.get().getCode().equals(codeString)) {
 				log.debug("Resetting user password");
 				//TODO
+				requestPasswordService.clearCode(email);
 				return userRepository.findByEmail(email).get();
 			}
 		}

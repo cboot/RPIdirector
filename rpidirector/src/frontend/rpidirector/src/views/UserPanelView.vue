@@ -5,7 +5,7 @@
       <b-button v-on:click="this.$root.logout">Logout</b-button>
     </b-row>
     <b-row>
-      <organizations-list ref="organizationsList"/>
+      <organizations-list ref="organizationsList" />
     </b-row>
     <b-row>
       <b-form-group
@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import OrganizationsList from '../components/OrganizationsList.vue';
+import OrganizationsList from "../components/OrganizationsList.vue";
+import OrganizationService from "../services/organizations";
 
 export default {
   components: { OrganizationsList },
@@ -39,40 +40,13 @@ export default {
   },
   methods: {
     createNewOrganization: function () {
-      if (this.organizationName == "") {
-        return;
-      }
-      const payload = {
-          name : this.organizationName
-      }
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": this.$root.authString,
-          
-        },
-        body: JSON.stringify(payload),
-      };
-
-      fetch("http://localhost:8080/api/private/organizations/", requestOptions)
-        .then((response) => {
-          if (response.status != 200) {
-            alert("Error!");
-          } else {
-            return response.json();
-          }
-        })
+      OrganizationService.create(this.organizationName)
         .then(() => {
           this.$refs.organizationsList.refresh();
         })
-        .catch((error) => alert("Error: " + error));
-      alert(
-        "Creating new org with name " +
-          this.organizationName +
-          " and user owner id: " +
-          this.$root.user.id
-      );
+        .catch((error) => {
+          alert("Error: " + error);
+        });
     },
   },
 };

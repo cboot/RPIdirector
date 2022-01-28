@@ -1,4 +1,4 @@
-package com.cboot.rpidirector.services.user;
+package com.cboot.rpidirector.services.users;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -37,14 +37,15 @@ public class LoginUseCase {
 		log.info("login {}", LogUtils.toJsonString("email", email));
 		Optional<User> optUser = userRepository.findByEmailAndPassword(email, passwordEncoder.encode(password));
 		
-		if (optUser.isPresent()) {
-			User user = optUser.get();
-			user.setToken(UUID.randomUUID().toString());
-			user.setTokenValidUntil(LocalDateTime.now().plusMinutes(TOKEN_EXPIRITY_EXTENSION_MINUTES));
-			userRepository.save(user);
-			return user;
-		} else {
+		if (! optUser.isPresent() ) {
 			throw new LoginException(messages.get("exception.login"));
 		}
+		
+		User user = optUser.get();
+		user.setToken(UUID.randomUUID().toString());
+		user.setTokenValidUntil(LocalDateTime.now().plusMinutes(TOKEN_EXPIRITY_EXTENSION_MINUTES));
+		userRepository.save(user);
+		return user;
+		
 	}
 }

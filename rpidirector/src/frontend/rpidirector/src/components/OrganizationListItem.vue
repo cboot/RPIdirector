@@ -1,7 +1,11 @@
 <template>
   <div>
     <b-col class="panel">
-      <router-link :to="{ path: '/organizations/'+this.propOrganizationInfo.id}">aaaaaaaa</router-link>
+      <router-link
+        :to="{ path: '/organizations/' + this.propOrganizationInfo.id }"
+        >Details</router-link
+      >
+      <my-confirm-action :modalTitle="'Delete organization'" :modalBody="'This is the body'" :icon="'trash'" :id="'modal-delete-organization-'+ propOrganizationInfo.id" />
       <font-awesome-icon
         :icon="['fas', 'trash']"
         v-on:click="deleteOrganization"
@@ -12,7 +16,7 @@
         v-on:click="leaveOrganization"
         v-if="propOrganizationInfo.role != 'OWNER'"
       />
-      
+
       <ul>
         <font-awesome-icon :icon="['fas', 'sitemap']"></font-awesome-icon>
         <li>{{ propOrganizationInfo.name }}</li>
@@ -31,92 +35,34 @@ import {
   faSitemap,
   faTrash,
   faDoorOpen,
-  faCogs
+  faCogs,
 } from "@fortawesome/free-solid-svg-icons";
+import OrganizationService from "../services/organizations";
+import MyConfirmAction from './MyConfirmAction.vue';
 library.add(faSitemap, faTrash, faDoorOpen, faCogs);
 
 export default {
+  components: { MyConfirmAction },
   name: "OrganizationsListItem",
   props: ["propOrganizationInfo"],
   methods: {
-    getOrganizationInfo: function () {
-      const requestOptions = {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.$root.authString,
-        },
-      };
-
-      fetch(
-        "http://localhost:8080/api/private/organizations/" +
-          this.propOrganizationInfo.id,
-        requestOptions
-      )
-        .then((response) => {
-          if (response.status != 200) {
-            alert("Error!");
-          } else {
-            return response.json();
-          }
-        })
-        .then((data) => {
-          console.log(data);
-        })
-        .catch((error) => alert("Error: " + error));
-    },
     deleteOrganization: function () {
-      const requestOptions = {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.$root.authString,
-        },
-      };
-
-      fetch(
-        "http://localhost:8080/api/private/organizations/" +
-          this.propOrganizationInfo.id,
-        requestOptions
-      )
-        .then((response) => {
-          if (response.status != 200) {
-            alert("Error!");
-          } else {
-            alert("deleting");
-            this.$emit("refreshFromChild", null);
-          }
+      OrganizationService.delete(this.propOrganizationInfo.id)
+        .then(() => {
+          this.$emit("refreshFromChild", null);
         })
         .catch((error) => alert("Error: " + error));
     },
     leaveOrganization: function () {
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: this.$root.authString,
-        },
-      };
-
-      fetch(
-        "http://localhost:8080/api/private/organizations/" +
-          this.propOrganizationInfo.id +
-          "/leave",
-        requestOptions
-      )
-        .then((response) => {
-          if (response.status != 200) {
-            alert("Error!");
-          } else {
-            alert("leaving");
-            this.$emit("refreshFromChild", null);
-          }
+      OrganizationService.leave(this.propOrganizationInfo.id)
+        .then(() => {
+          this.$emit("refreshFromChild", null);
         })
         .catch((error) => alert("Error: " + error));
     },
     getDetailLink() {
       return "/organizations/" + this.propOrganizationInfo.id;
-    }
+    },
   },
 };
 </script>

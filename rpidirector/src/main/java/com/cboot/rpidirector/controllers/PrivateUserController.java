@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cboot.rpidirector.controllers.utils.RestUtils;
-import com.cboot.rpidirector.services.user.LogoutUseCase;
+import com.cboot.rpidirector.services.users.LogoutUseCase;
 
 @CrossOrigin
 @RestController
